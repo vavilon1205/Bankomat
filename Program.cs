@@ -6,21 +6,34 @@ namespace Bankomat
     {
         static void Main(string[] args)
         {
-
-            int menu = 0;
-            while (true)
+            bool program = true;
+            int menu = 1;
+            int attempt = 1;
+            while (program == true)
             {
                 switch (menu)
                 {
-                    case 0:
-                        ScreenMessages.Wellcome();
-                        ScreenMessages.EnterPincode();
-                        menu = Security.EnterPinkode(0, 1); 
-
+                        // Выход из программы
+                    case 0: 
+                        ScreenMessages.MisstakePincode();
+                        program = false;
                         break;
 
+                        // Приветсвие, ввод пинкода.
                     case 1:
-                        Console.WriteLine("Ok");
+                        
+                        ScreenMessages.Wellcome();
+                        ScreenMessages.EnterPincode();
+                        menu = Security.EnterPinkode(1, 2, 0, attempt);
+                        attempt++; 
+                        Console.Clear();
+                        break;
+                    
+                        // Главное меню
+                    case 2:
+                        ScreenMessages.WellcomeMainMenu();
+                        ScreenMessages.MainMenu();
+
                         Console.ReadKey();  
                         break;
 

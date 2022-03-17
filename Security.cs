@@ -8,14 +8,14 @@ namespace Bankomat
 {
     internal class Security
     {
-        
+
         public static string EnterInformation()
         {
-           string enter = Console.ReadLine();
-           
-           return enter;
+            string information = Console.ReadLine();
+
+            return information;
         }
-       
+
         public static bool NumberCheck(string a)
         {
             int b;
@@ -34,26 +34,38 @@ namespace Bankomat
             }
         }
 
-        public static int EnterPinkode(int menuFirst, int menuSecond)
+        public static int EnterPinkode(int menuFirst, int menuSecond, int menuThird, int attempt)
         {
             //int pincode;
-            string enter;
-            int lenghtString;
-            bool a = NumberCheck(enter = EnterInformation());
-            if (a == true)
+            if (attempt == 4)
+            {    
+                return menuThird;
+            }
+            else
             {
-                //pincode = Convert.ToInt32(EnterInformation());
-                lenghtString = enter.Length;
-                if(lenghtString >= 0 & lenghtString <= 4)
+                string enter;
+                int lenghtString;
+                bool a = NumberCheck(enter = EnterInformation());
+                if (a == true)
                 {
-                    return menuSecond;
+                    //pincode = Convert.ToInt32(EnterInformation());
+                    lenghtString = enter.Length;
+                    if (lenghtString >= 0 & lenghtString <= 4)
+                    {
+                        return menuSecond;
+                    }
+                    else { return menuFirst; }
+
+
                 }
                 else { return menuFirst; }
-                
-                
+
+
             }
-            else { return menuFirst; }
-            
+
+
         }
+
+        
     }
 }
