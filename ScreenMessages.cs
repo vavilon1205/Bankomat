@@ -12,10 +12,16 @@ namespace Bankomat
         public static void Wellcome()
         {
             DateTime now = DateTime.Now;
-            Console.WriteLine($"\t\tДобро пожаловать в банкомат\n\t\tСегодня {now}");
+            Console.WriteLine($"Добро пожаловать в банкомат\nСегодня {now}");
+        }
+        public static void EnterPincode()
+        {
+            
+            Console.WriteLine("\nВведите пинкод");
         }
 
-        
-            
+
+
+
     }
 }
