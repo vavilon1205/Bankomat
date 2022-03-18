@@ -8,7 +8,11 @@ namespace Bankomat
 {
     internal class ScreenMessages
     {
-
+        public static void ChoiceCard()
+        {
+            
+            Console.WriteLine("Выберите карту и вставьте в банкомат");
+        }
         public static void Wellcome()
         {
             DateTime now = DateTime.Now;

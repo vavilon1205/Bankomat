@@ -11,6 +11,7 @@ namespace Bankomat
 
         public static string EnterInformation()
         {
+            Console.WriteLine("\nВаш выбор: ");
             string information = Console.ReadLine();
 
             return information;
@@ -38,7 +39,7 @@ namespace Bankomat
         {
             //int pincode;
             if (attempt == 4)
-            {    
+            {
                 return menuThird;
             }
             else
@@ -66,6 +67,26 @@ namespace Bankomat
 
         }
 
-        
+        public static int EnterMenu(int menuFirst, int menuLast, int menuReturn, int shiftForward)
+        {
+            
+            string enter;
+            bool a = NumberCheck(enter = EnterInformation());
+            if (a == true)
+            {
+                int number = Convert.ToInt32(enter);
+                if(number >= menuFirst & number <= menuLast)
+                {
+                    if(number == 0)
+                    {
+                        return number;
+                    }
+                    else {return number + shiftForward; }
+                    
+                }
+                else { return menuReturn; }
+            }
+            else { return menuReturn; }
+        }
     }
 }
