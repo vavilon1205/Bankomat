@@ -16,7 +16,12 @@ namespace Bankomat
             Console.WriteLine("Создание и редактирование карт\t\t - 1");
             Console.WriteLine("Пополнение банкомата\t\t\t - 2");
         }
+        public static void SetingsCreate()
+        {
+            FileStream setings = new FileStream("Setings.txt", FileMode.OpenOrCreate);
+            setings.Close();
+        }
 
-        
+       
     }
 }

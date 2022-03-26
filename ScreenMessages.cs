@@ -39,6 +39,35 @@ namespace Bankomat
         }
 
 
+        // Скролл загрузки с выборос сообщения и времени
+        public static void MessageLoading(string message, int time, string symbol, int lenght)
+        {
+            Console.Clear();
+            Console.WriteLine($"\t\t\t{message}");
+            Random rnd = new Random();
+            int randomTime = rnd.Next(0, time);
+            for (int i = 0; i < lenght; i++)
+            {
+                Console.Write(symbol);
+                Thread.Sleep(randomTime);
+            }
+            Console.Clear();
+        }
+
+        // Мерцающее сообщение
+        public static void MessageFlicker(int n, int tab, string message, int time, int flicker)
+        {
+            for (int i = 0; i < flicker; i++)
+            {
+                Console.Clear();
+                Console.WriteLine(string.Concat(Enumerable.Repeat("\n", n)));
+                Console.Write(string.Concat(Enumerable.Repeat("\t", tab)) + message);
+                Thread.Sleep(time);
+                Console.Clear();
+                Thread.Sleep(time);
+            }
+        }
+
 
 
     }

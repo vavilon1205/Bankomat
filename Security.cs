@@ -8,7 +8,7 @@ namespace Bankomat
 {
     internal class Security
     {
-
+        // Выводит: "Ваш выбор:"
         public static string EnterInformation()
         {
             Console.WriteLine("\nВаш выбор: ");
@@ -17,7 +17,9 @@ namespace Bankomat
             return information;
         }
 
-        public static bool NumberCheck(string a)
+
+        // Проверяет string на int выдает true или false
+        public static bool NumberCheckInt(string a)
         {
             int b;
             while (true)
@@ -35,6 +37,8 @@ namespace Bankomat
             }
         }
 
+
+        // Проверяет введенный пинкод
         public static int EnterPinkode(int menuFirst, int menuSecond, int menuThird, int attempt)
         {
             //int pincode;
@@ -46,7 +50,7 @@ namespace Bankomat
             {
                 string enter;
                 int lenghtString;
-                bool a = NumberCheck(enter = EnterInformation());
+                bool a = NumberCheckInt(enter = EnterInformation());
                 if (a == true)
                 {
                     //pincode = Convert.ToInt32(EnterInformation());
@@ -67,11 +71,13 @@ namespace Bankomat
 
         }
 
+
+        // Ввод номера меню для перехода + проверка
         public static int EnterMenu(int menuFirst, int menuLast, int menuReturn, int shiftForward)
         {
             
             string enter;
-            bool a = NumberCheck(enter = EnterInformation());
+            bool a = NumberCheckInt(enter = EnterInformation());
             if (a == true)
             {
                 int number = Convert.ToInt32(enter);
@@ -86,7 +92,50 @@ namespace Bankomat
                 }
                 else { return menuReturn; }
             }
+            else if(enter == "") { return 0; } 
+            
             else { return menuReturn; }
+        }
+
+
+        // Проверяет string на decimal выдает true или false
+        public static bool NumberCheckDecimal(string a)
+        {
+            decimal b;
+            while (true)
+            {
+                if (decimal.TryParse(a, out b))
+
+                {
+                    b = Convert.ToDecimal(a);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+
+        // Проверка введенного пинкода для записи на карту
+        public static bool NumberEnterPinCodeWriteCard(string a)
+        {
+            int b;
+            while (true)
+            {
+                if (int.TryParse(a, out b) & a.Length == 4)
+
+                {
+                    b = Convert.ToInt32(a);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }
