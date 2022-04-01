@@ -85,16 +85,18 @@ namespace Bankomat
                 {
                     if(number == 0)
                     {
+                        Console.Clear();
                         return number;
                     }
-                    else {return number + shiftForward; }
+                    else { Console.Clear(); return number + shiftForward; }
                     
                 }
-                else { return menuReturn; }
+                else { Console.Clear(); return menuReturn; }
             }
-            else if(enter == "") { return 0; } 
+            else if(enter == "") { Console.Clear(); return 0; } 
             
-            else { return menuReturn; }
+            else { Console.Clear(); return menuReturn; }
+            
         }
 
 

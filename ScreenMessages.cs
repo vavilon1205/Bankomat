@@ -39,7 +39,7 @@ namespace Bankomat
         }
 
 
-        // Скролл загрузки с выборос сообщения и времени
+        // Скролл загрузки с выбором сообщения и времени
         public static void MessageLoading(string message, int time, string symbol, int lenght)
         {
             Console.Clear();

@@ -21,7 +21,16 @@ namespace Bankomat
             FileStream setings = new FileStream("Setings.txt", FileMode.OpenOrCreate);
             setings.Close();
         }
+        public static void WellcomeMenuBanknotes()
+        {
+            Console.WriteLine("Меню пополнения банкомата купюрами\n");
+            Console.WriteLine("Выход из меню\t\t\t\t - 0");
+            Console.WriteLine("Информация о купюрах в банкомате\t - 1");
+            Console.WriteLine("Пополнение купюрами\t\t\t - 2");
 
-       
+
+        }
+
+
     }
 }
