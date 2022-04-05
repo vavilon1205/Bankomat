@@ -8,25 +8,29 @@ namespace Bankomat
         {
             bool program = true;                        // Переменная главного цикла программы
             bool menuAdminBool = true;                  // Переменная цикла меню администратора
+            bool menuAdminCreateCartBool = true;        // Переменная цикла создания и редактирования карт
+            bool menuAdminBanknotesBool = true;         // Переменная цикла главного меню банкнот
 
 
 
-            int menu = 1;                               // Переменная меню главного цикла программы
+            int menu = 2;                               // Переменная меню главного цикла программы
             int menuAdmin = 1;                          // Переменная меню администратора
             int menuAdminCreateCard = 1;                // Переменная меню создания и редактирования карт
             int createCard = 1;                         // Переменная меню создания карт
             int readCard = 1;                           // Переменная меню чтения карт
             int editCard = 1;                           // Переменная меню редактирования карт
             int renameCard = 1;                         // Переменная подменю изменения данных карт
-            int deleteCard = 1;                         // Переменная подменю удаления карт
+            //int deleteCard = 1;                         // Переменная подменю удаления карт
 
             int menuAdminBanknotes = 1;                 // Переменная меню администратора
             int informationBanknotes = 1;               // Переменная подменю информация о купюрах в банкомате
             int editBanknotes = 1;                      // Переменная подменю изменения купюр
 
-            int attempt = 1;                            // Переменная значения ошибки
+            //int attempt = 1;                            // Переменная значения ошибки
             string parth = "Cards.txt";                 // Путь хранения карт
             int numberCard = 1;                         // Переменная возврата номера по счету карты
+            string securyAdminPin = "0";                // Пинкод входа в меню администратора
+
 
             while (program == true)
             {
@@ -34,6 +38,7 @@ namespace Bankomat
                 {
                     // Выход из программы
                     case 0:
+                        
                         ScreenMessages.MisstakePincode();
                         Console.ReadLine();
                         program = false;
@@ -42,6 +47,7 @@ namespace Bankomat
                     // МЕНЮ АДМИНИСТРАТОРА
                     case 1:
                         menuAdminBool = true;
+                        menuAdmin = 1;
                         while (menuAdminBool == true)
                         {
                             switch (menuAdmin)
@@ -64,15 +70,15 @@ namespace Bankomat
                                     break;
                                 // МЕНЮ СОЗДАНИЯ И РЕДАКТИРОВАНИЯ КАРТ
                                 case 2:
-                                    menuAdminBool = true;
-                                    while (menuAdminBool == true)
+                                    menuAdminCreateCartBool = true;
+                                    while (menuAdminCreateCartBool == true)
                                     {
-
+                                        
                                         switch (menuAdminCreateCard)
                                         {
                                             // Выход из меню создания и редактирования карт
                                             case 0:
-                                                menuAdminBool = false;
+                                                menuAdminCreateCartBool = false;
                                                 menuAdmin = 1;
                                                 break;
                                             // Главное меню создания и редактирования карт
@@ -122,11 +128,12 @@ namespace Bankomat
                                                             if (numberCard > 0)
                                                             {
                                                                 menuAdminCreateCard = 4;
-
                                                                 editCard = 1;
+                                                                menuAdminCreateCartBool = true;
+
 
                                                             }
-                                                            if (numberCard == 0) { readCard = 0; }
+                                                            else if (numberCard == 0) { readCard = 0; }
                                                             menuAdminBool = false;
                                                             Console.Clear();
                                                             break;
@@ -199,14 +206,14 @@ namespace Bankomat
                                     break;
                                 // МЕНЮ ПОПОЛНЕНИЯ БАНКОМАТА КУПЮРАМИ
                                 case 3:
-                                    menuAdminBool = true;
-                                    while (menuAdminBool == true)
+                                    menuAdminBanknotesBool = true;
+                                    while (menuAdminBanknotesBool == true)
                                     {
                                         switch (menuAdminBanknotes)
                                         {
                                             // Выход из меню пополнения купюрами
                                             case 0:
-                                                menuAdminBool = false;
+                                                menuAdminBanknotesBool = false;
                                                 menuAdmin = 1;
                                                 break;
                                             // меню пополнения купюрами
@@ -215,7 +222,7 @@ namespace Bankomat
                                                 menuAdminBanknotes = Security.EnterMenu(1, 3, 0, 1);
                                                 informationBanknotes = 1;
                                                 editBanknotes = 1;
-                                                menuAdminBool = false;   
+                                                //menuAdminBanknotesBool = false;
                                                 break;
 
                                             // Подменю информации о купюрах
@@ -256,18 +263,18 @@ namespace Bankomat
                                                         // Изменение купюр
                                                         case 1:
                                                             editBanknotes = Money.MenuEditBanknotesBankomat();
-                                                            if (editBanknotes == 0){editBanknotes = 0;}
-                                                            else if(editBanknotes == 1){editBanknotes = 2;}
+                                                            if (editBanknotes == 0) { editBanknotes = 0; }
+                                                            else if (editBanknotes == 1) { editBanknotes = 2; }
                                                             else if (editBanknotes == 2) { editBanknotes = 3; }
                                                             else if (editBanknotes == 3) { editBanknotes = 4; }
 
-                                                            
+
                                                             menuAdminBool = false;
                                                             break;
                                                         // Изменение Rub
                                                         case 2:
                                                             editBanknotes = Money.MenuEditBanknotesRubUsdEur("rub");
-                                                            if(editBanknotes == 0){editBanknotes = 1;}
+                                                            if (editBanknotes == 0) { editBanknotes = 1; }
                                                             else if (editBanknotes == 1) { Money.EditBanknotesRubUsdEur("rub"); }
 
 
@@ -294,44 +301,30 @@ namespace Bankomat
                                                     }
                                                 }
                                                 break;
-
-
-
-
-
-
-
-
                                         }
-
-
                                     }
-
-
-
                                     break;
-
-
-
-
                             }
                         }
                         break;
 
                     // Выбор карты
                     case 2:
-                        ScreenMessages.ChoiceCard();
+                        numberCard = MainMenu.ChoiceCard(securyAdminPin);
+                        if (numberCard == -1) { menu = 1; }
+                        else if (numberCard == -2) { program = false; break; }
+                        else { menu = 3; }
 
 
                         break;
 
                     // Приветсвие, ввод пинкода.
                     case 3:
-
-                        ScreenMessages.Wellcome();
-                        ScreenMessages.EnterPincode();
-                        menu = Security.EnterPinkode(2, 3, 0, attempt);
-                        attempt++;
+                        menu = MainMenu.PinkodeEnter(securyAdminPin, numberCard, parth);
+                        if (menu == -1) { menu = 0; }
+                        else if(menu == 0) { menu = 1; }
+                        else if (menu == 1) { menu = 4; }
+                        else if (menu == -3) { menu = 2; }
                         Console.Clear();
                         break;
 
