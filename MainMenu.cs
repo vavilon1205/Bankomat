@@ -102,21 +102,80 @@ namespace Bankomat
             }
 
             return enterInt;
+        }
 
+        public static void BalanceCardMenu()
+        {
 
-
-
-
-
+            Console.WriteLine("\nВернуться назад\t\t\t\t- 0");
+            Console.WriteLine("Вывести баланс карты на экран\t\t- 1");
+            Console.WriteLine("Распечатать чек с балансом карты\t- 2");
+           
+            
 
 
 
         }
 
+        public static void BalanceCard(int numberCard, string parth)
+        {
+
+            string? moneyRub;
+            string? moneyUsd;
+            string? moneyEur;
+
+            string? text;
+            string? pincode;
+            int enterInt = 0;
+            int attempt = 1;
+            bool attemptBool = true;
+            bool intBool = true;
+
+
+            string[] textStrings = File.ReadAllLines(parth);
+            string[] textString;
+
+            moneyRub = (textStrings[numberCard - 1].Split(new char[] { '/' }))[3];
+            moneyUsd = (textStrings[numberCard - 1].Split(new char[] { '/' }))[4];
+            moneyEur = (textStrings[numberCard - 1].Split(new char[] { '/' }))[5];
+
+            Console.WriteLine("\n\n\t\t\tБаланс карты:");
+            Console.WriteLine($"\n\tСумма рублей:\t\t\t{moneyRub} руб\n");
+            Console.WriteLine($"\n\tСумма dollars:\t\t\t{moneyUsd} usd\n");
+            Console.WriteLine($"\n\tСумма euro:\t\t\t{moneyEur} eur\n\n");
+            Console.WriteLine("\n\nВернуться назад\t\t\t\t- 0");
+          
+
+
+        }
+
+
+        public static void BalanceCardPrint(int numberCard, string parth, string parthPrintBalance)
+        {
+
+            string? moneyRub;
+            string? moneyUsd;
+            string? moneyEur;
+
+            string[] textStrings = File.ReadAllLines(parth);
+            string[] textString;
+
+            moneyRub = (textStrings[numberCard - 1].Split(new char[] { '/' }))[3];
+            moneyUsd = (textStrings[numberCard - 1].Split(new char[] { '/' }))[4];
+            moneyEur = (textStrings[numberCard - 1].Split(new char[] { '/' }))[5];
+
+            StreamWriter writer = new StreamWriter(parthPrintBalance, false);
+            writer.WriteLine($"\n\n\t\t\tБаланс карты:\n\tСумма рублей:\t\t\t{moneyRub} руб\n\n\tСумма dollars:\t\t\t{moneyUsd} usd\n\n\tСумма euro:\t\t\t{moneyEur} eur\n\n");
+            writer.Close();
+            ScreenMessages.MessageLoading("Печать чека", 50, "$", 70);
+            ScreenMessages.MessageFlicker(4, 3, "Чек распечатан!", 500, 3);
+            Console.Clear();
+            
+           
 
 
 
-
+        }
 
 
 

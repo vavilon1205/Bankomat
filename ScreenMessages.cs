@@ -34,6 +34,8 @@ namespace Bankomat
             Console.WriteLine("\nПрервать операцию и вернуть карту\t- 0\nУзнать баланс\t\t\t\t- 1\nСнять наличные\t\t\t\t- 2\nВнести наличные\t\t\t\t- 3\n");
         }
 
+        
+
 
         // Скролл загрузки с выбором сообщения и времени
         public static void MessageLoading(string message, int time, string symbol, int lenght)

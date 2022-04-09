@@ -10,6 +10,7 @@ namespace Bankomat
             bool menuAdminBool = true;                  // Переменная цикла меню администратора
             bool menuAdminCreateCartBool = true;        // Переменная цикла создания и редактирования карт
             bool menuAdminBanknotesBool = true;         // Переменная цикла главного меню банкнот
+            bool menuMainBalanceBool = true;            // Переменная цикла меню баланса карты
 
 
 
@@ -26,12 +27,15 @@ namespace Bankomat
             int informationBanknotes = 1;               // Переменная подменю информация о купюрах в банкомате
             int editBanknotes = 1;                      // Переменная подменю изменения купюр
 
+            int menuMainBalance;                        // Переменная меню баланса карты
+
             //int attempt = 1;                            // Переменная значения ошибки
             string parth = "Cards.txt";                 // Путь хранения карт
+            string parthPrintBalance = "C:\\Users\\vavil\\OneDrive\\Рабочий стол\\Balance.txt";
             int numberCard = 1;                         // Переменная возврата номера по счету карты
             string securyAdminPin = "0";                // Пинкод входа в меню администратора
 
-
+            ApplicationContext db = new ApplicationContext();
             while (program == true)
             {
                 switch (menu)
@@ -318,7 +322,7 @@ namespace Bankomat
 
                         break;
 
-                    // Приветсвие, ввод пинкода.
+                    // Приветствие, ввод пинкода.
                     case 3:
                         menu = MainMenu.PinkodeEnter(securyAdminPin, numberCard, parth);
                         if (menu == -1) { menu = 0; }
@@ -332,8 +336,51 @@ namespace Bankomat
                     case 4:
                         ScreenMessages.WellcomeMainMenu();
                         ScreenMessages.MainMenu();
+                        menu = Security.EnterMenu(0, 3, 4, 0);
+                        if (menu == 0) { menu = 2; }
+                        else if(menu == 1) { menu = 5; }
+                        else if (menu == 2) { menu = 6; }
+                        else if (menu == 3) { menu = 7; }
+                        break;
+                    
+                    // Вывод баланса карты
+                    case 5:
 
-                        Console.ReadKey();
+                        MainMenu.BalanceCardMenu();
+                        menuMainBalance = Security.EnterMenu(1, 2, 0, 0);
+                        if(menuMainBalance == 0) { menu = 4; }
+                        menuMainBalanceBool = true;
+
+                        
+                        while (menuMainBalanceBool == true)
+                        {
+                            
+                            switch (menuMainBalance)
+                            {
+                                case 0:
+
+                                    menu = 4;
+                                    menuMainBalanceBool = false;
+
+                                    break;
+
+                                case 1:
+
+                                    MainMenu.BalanceCard(numberCard, parth);
+                                    menuMainBalance = Security.EnterMenu(0, 0, 1, 0);
+
+                                    break;
+
+                                case 2:
+
+                                    MainMenu.BalanceCardPrint(numberCard, parth, parthPrintBalance);
+                                    menuMainBalance = 0;
+
+                                    break;
+                            }
+                        }
+
+
                         break;
 
 

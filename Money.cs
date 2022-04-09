@@ -7,18 +7,6 @@
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                //Rub  test = new Rub {hundred=50, twoThousand=50, fiveHundred=50, thousand=50, twoHundred=50, fiveThousand=50};
-
-
-                //db.Rub.Add(test);
-                //db.SaveChanges();
-                //Rub test = db.Rub.FirstOrDefault();
-                //if (test != null)
-                //{
-                //    db.Rub.Remove(test);
-                //    db.SaveChanges();
-                //}
-
                 var banknotesRub = db.Rub.ToList();
                 Console.WriteLine("Информация о купюрах Rub:");
                 foreach (var r in banknotesRub)
