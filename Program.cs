@@ -6,36 +6,56 @@ namespace Bankomat
     {
         static void Main(string[] args)
         {
+            
+
+
+
+
             bool program = true;                        // Переменная главного цикла программы
             bool menuAdminBool = true;                  // Переменная цикла меню администратора
             bool menuAdminCreateCartBool = true;        // Переменная цикла создания и редактирования карт
             bool menuAdminBanknotesBool = true;         // Переменная цикла главного меню банкнот
             bool menuMainBalanceBool = true;            // Переменная цикла меню баланса карты
+            bool menuMainCashWithdravalBool = true;     // Переменная цикла меню выдачи наличных
+            bool menuSettingsBankomat = true;           // Переменная цикла меню настроек банкомата
 
 
 
             int menu = 2;                               // Переменная меню главного цикла программы
+
             int menuAdmin = 1;                          // Переменная меню администратора
             int menuAdminCreateCard = 1;                // Переменная меню создания и редактирования карт
             int createCard = 1;                         // Переменная меню создания карт
             int readCard = 1;                           // Переменная меню чтения карт
             int editCard = 1;                           // Переменная меню редактирования карт
             int renameCard = 1;                         // Переменная подменю изменения данных карт
-            //int deleteCard = 1;                         // Переменная подменю удаления карт
+            int settingsBankomat = 1;                   // Переменная меню настроек банкомата
 
-            int menuAdminBanknotes = 1;                 // Переменная меню администратора
+            int menuAdminBanknotes = 1;                 // Переменная меню купюр
             int informationBanknotes = 1;               // Переменная подменю информация о купюрах в банкомате
             int editBanknotes = 1;                      // Переменная подменю изменения купюр
 
-            int menuMainBalance;                        // Переменная меню баланса карты
+            int menuMainBalance = 1;                    // Переменная меню баланса карты
+            int menuMainCashWithdraval = 1;             // Переменная меню выдачи наличных
 
-            //int attempt = 1;                            // Переменная значения ошибки
-            string parth = "Cards.txt";                 // Путь хранения карт
-            string parthPrintBalance = "C:\\Users\\vavil\\OneDrive\\Рабочий стол\\Balance.txt";
+
+
+
+
             int numberCard = 1;                         // Переменная возврата номера по счету карты
-            string securyAdminPin = "0";                // Пинкод входа в меню администратора
+            string? securyAdminPin;            // Пинкод входа в меню администратора
 
-            ApplicationContext db = new ApplicationContext();
+            DbCreateSet.DbCreateSetValue();
+
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var securyCodeMenu = db.SettingsBankomat.ToList();
+                
+
+
+                securyAdminPin = securyCodeMenu[0].securyCode;
+                
+            }
             while (program == true)
             {
                 switch (menu)
@@ -66,7 +86,7 @@ namespace Bankomat
                                 // Главное меню администратора
                                 case 1:
                                     MenuAdministrator.WellcomeMenuAdministrator();
-                                    menuAdmin = Security.EnterMenu(0, 2, 1, 1);
+                                    menuAdmin = Security.EnterMenu(0, 3, 1, 1);
                                     menuAdminCreateCard = 1;
                                     menuAdminBanknotes = 1;
                                     Console.Clear();
@@ -87,7 +107,7 @@ namespace Bankomat
                                                 break;
                                             // Главное меню создания и редактирования карт
                                             case 1:
-                                                Cards.WellcomeMenuCreateCards();
+                                                MenuAdministrator.WellcomeMenuCreateCards();
                                                 menuAdminCreateCard = Security.EnterMenu(0, 2, 1, 1);
                                                 createCard = 1;
                                                 readCard = 1;
@@ -108,7 +128,7 @@ namespace Bankomat
                                                             break;
                                                         // Создание карт
                                                         case 1:
-                                                            createCard = Cards.WriteCard(parth, 0);
+                                                            createCard = Cards.WriteCard(0);
                                                             Console.Clear();
                                                             break;
                                                     }
@@ -128,7 +148,7 @@ namespace Bankomat
                                                             break;
                                                         // чтение карт
                                                         case 1:
-                                                            numberCard = Cards.ReadCards(parth);
+                                                            numberCard = Cards.ReadCards();
                                                             if (numberCard > 0)
                                                             {
                                                                 menuAdminCreateCard = 4;
@@ -161,7 +181,7 @@ namespace Bankomat
                                                         // меню редактирования карт
                                                         case 1:
 
-                                                            editCard = Cards.EditDataCards(parth, numberCard);
+                                                            editCard = Cards.EditDataCards(numberCard);
                                                             Console.Clear();
                                                             if (editCard == 0)
                                                             {
@@ -195,7 +215,7 @@ namespace Bankomat
                                                             break;
                                                         // изменения данных карт
                                                         case 1:
-                                                            renameCard = Cards.RenameDataCards(parth, 0, numberCard);
+                                                            renameCard = Cards.RenameDataCards(0, numberCard);
                                                             Console.Clear();
                                                             menuAdminBool = false;
                                                             break;
@@ -226,7 +246,7 @@ namespace Bankomat
                                                 menuAdminBanknotes = Security.EnterMenu(1, 3, 0, 1);
                                                 informationBanknotes = 1;
                                                 editBanknotes = 1;
-                                                //menuAdminBanknotesBool = false;
+                                               
                                                 break;
 
                                             // Подменю информации о купюрах
@@ -308,13 +328,55 @@ namespace Bankomat
                                         }
                                     }
                                     break;
+
+                                // НАСТРОЙКИ БАНКОМАТА
+                                case 4:
+                                    menuSettingsBankomat = true;
+                                    settingsBankomat = 1;
+                                    while (menuSettingsBankomat == true)
+                                    {
+                                        switch (settingsBankomat)
+                                        {
+                                            // Выход из изменения настроек банкомата
+                                            case 0:
+                                                menuSettingsBankomat = false;
+                                                menuAdminBool = true;
+                                                menuAdmin = 1;
+                                                break;
+
+                                            case 1:
+                                                MenuAdministrator.WellcomeMenuSettings();
+                                                settingsBankomat = Security.EnterMenu(1, 4, 1, 1);
+                                                break;
+
+                                            case 2:
+                                                settingsBankomat = SettingsMenuBankomat.AdminCode();
+                                                if(settingsBankomat == 0) { settingsBankomat = 1; }
+                                                break;
+
+                                            case 3:
+                                                settingsBankomat = SettingsMenuBankomat.PathSaveCard();
+                                                if (settingsBankomat == 0) { settingsBankomat = 1; }
+                                                break;
+
+                                            case 4:
+                                                settingsBankomat = SettingsMenuBankomat.PathPrintBalance();
+                                                if (settingsBankomat == 0) { settingsBankomat = 1; }
+                                                break;
+
+
+                                        }
+
+                                    }
+
+                                    break;
                             }
                         }
                         break;
 
                     // Выбор карты
                     case 2:
-                        numberCard = MainMenu.ChoiceCard(securyAdminPin);
+                        numberCard = MainMenu.ChoiceCard();
                         if (numberCard == -1) { menu = 1; }
                         else if (numberCard == -2) { program = false; break; }
                         else { menu = 3; }
@@ -324,7 +386,7 @@ namespace Bankomat
 
                     // Приветствие, ввод пинкода.
                     case 3:
-                        menu = MainMenu.PinkodeEnter(securyAdminPin, numberCard, parth);
+                        menu = MainMenu.PinkodeEnter(securyAdminPin, numberCard);
                         if (menu == -1) { menu = 0; }
                         else if(menu == 0) { menu = 1; }
                         else if (menu == 1) { menu = 4; }
@@ -366,14 +428,52 @@ namespace Bankomat
 
                                 case 1:
 
-                                    MainMenu.BalanceCard(numberCard, parth);
+                                    MainMenu.BalanceCard(numberCard);
                                     menuMainBalance = Security.EnterMenu(0, 0, 1, 0);
 
                                     break;
 
                                 case 2:
 
-                                    MainMenu.BalanceCardPrint(numberCard, parth, parthPrintBalance);
+                                    MainMenu.BalanceCardPrint(numberCard);
+                                    menuMainBalance = 0;
+
+                                    break;
+                            }
+                        }
+
+
+                        break;
+
+                    // Снятие наличных
+                    case 6:
+
+                        MainMenu.CashWithdravalMenu();
+                        menuMainCashWithdraval = Security.EnterMenu(1, 2, 0, 0);
+                        if (menuMainCashWithdraval == 0) { menu = 4; }
+                        menuMainCashWithdravalBool = true;
+                        while (menuMainBalanceBool == true)
+                        {
+
+                            switch (menuMainCashWithdraval)
+                            {
+                                case 0:
+
+                                    menu = 4;
+                                    menuMainBalanceBool = false;
+
+                                    break;
+
+                                case 1:
+
+                                    Money.CashWithdravalWithExchange();
+                                    
+
+                                    break;
+
+                                case 2:
+
+                                    MainMenu.BalanceCardPrint(numberCard);
                                     menuMainBalance = 0;
 
                                     break;

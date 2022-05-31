@@ -5,6 +5,7 @@
         // Выводит информацию о количестве купюр в банкомате
         public static void InformationBanknotesBankomat()
         {
+            
             using (ApplicationContext db = new ApplicationContext())
             {
                 var banknotesRub = db.Rub.ToList();
@@ -27,10 +28,9 @@
                 {
                     Console.Write($"'5'\t - {e.five}\n'10'\t - {e.ten}\n'20'\t - {e.twenty}\n'50'\t - {e.fifty}\n'100'\t - {e.hundred}\n'200'\t - {e.twoHundred}\n'500'\t - {e.fiveHundred}\n");
                 }
+                Console.WriteLine("\nВернуться назад\t\t\t - 0");
+
             }
-            Console.WriteLine("\nВернуться назад\t\t\t - 0");
-
-
         }
 
         // Меню пополнения банкнот
@@ -77,7 +77,7 @@
             string text = "";
             string valute = "купюра с номиналом ";
             string unit = " единиц";
-            
+
 
             using (ApplicationContext db = new ApplicationContext())
             {
@@ -152,12 +152,12 @@
             switch (rubUsdEur)
             {
                 case "rub":
-
                     Console.Clear();
                     using (ApplicationContext db = new ApplicationContext())
                     {
                         Rub test = new Rub();
                         var banknotesRub = db.Rub.ToList();
+                        
 
                         banknotesRub[0].hundred = BanknotesEdit(rubNumberList[0], banknotesRub[0].hundred);
                         banknotesRub[0].twoHundred = BanknotesEdit(rubNumberList[1], banknotesRub[0].twoHundred);
@@ -179,8 +179,10 @@
                     Console.Clear();
                     using (ApplicationContext db = new ApplicationContext())
                     {
+
                         Usd test = new Usd();
                         var banknotesUsd = db.Usd.ToList();
+
 
                         banknotesUsd[0].one = BanknotesEdit(usdNumberList[0], banknotesUsd[0].one);
                         banknotesUsd[0].two = BanknotesEdit(usdNumberList[1], banknotesUsd[0].two);
@@ -189,6 +191,7 @@
                         banknotesUsd[0].twenty = BanknotesEdit(usdNumberList[4], banknotesUsd[0].twenty);
                         banknotesUsd[0].fifty = BanknotesEdit(usdNumberList[5], banknotesUsd[0].fifty);
                         banknotesUsd[0].hundred = BanknotesEdit(usdNumberList[6], banknotesUsd[0].hundred);
+
 
                         db.SaveChanges();
 
@@ -220,7 +223,7 @@
 
                     }
                     break;
-                    
+
             }
             Console.Clear();
         }
@@ -262,6 +265,253 @@
 
 
         }
+
+        public static void CashWithdraval(string rubUsdEur)
+        {
+
+            //Console.WriteLine("\nВернуться назад\t\t\t\t- 0");
+            //Console.WriteLine("Снять наличные с разменом\t\t- 1");
+            //Console.WriteLine("Снять наличные без размена\t- 2");
+
+
+            int enterCash;
+            string? enterCashString;
+            bool attemptBool = true;
+            bool intBool = true;
+
+
+            while (attemptBool == true)
+            {
+                
+                Console.WriteLine("\n\n\nВведите сумму для снятия\n");
+                enterCashString = Security.EnterInformation();
+                intBool = Security.NumberCheckInt(enterCashString);
+                if (intBool == false) { attemptBool = false; }
+
+
+
+
+
+            }
+
+            
+
+
+            List<string> rubNumberList = new List<string> { "100", "200", "500", "1000", "2000", "5000" };
+            List<string> usdNumberList = new List<string> { "1", "2", "5", "10", "20", "50", "100" };
+            List<string> eurNumberList = new List<string> { "5", "10", "20", "50", "100", "200", "500" };
+
+            switch (rubUsdEur)
+            {
+                case "rub":
+                    Console.Clear();
+                    using (ApplicationContext db = new ApplicationContext())
+                    {
+                        Rub test = new Rub();
+                        var banknotesRub = db.Rub.ToList();
+
+
+                        banknotesRub[0].hundred = BanknotesEdit(rubNumberList[0], banknotesRub[0].hundred);
+                        banknotesRub[0].twoHundred = BanknotesEdit(rubNumberList[1], banknotesRub[0].twoHundred);
+                        banknotesRub[0].fiveHundred = BanknotesEdit(rubNumberList[2], banknotesRub[0].fiveHundred);
+                        banknotesRub[0].thousand = BanknotesEdit(rubNumberList[3], banknotesRub[0].thousand);
+                        banknotesRub[0].twoThousand = BanknotesEdit(rubNumberList[4], banknotesRub[0].twoThousand);
+                        banknotesRub[0].fiveThousand = BanknotesEdit(rubNumberList[5], banknotesRub[0].fiveThousand);
+
+                        db.SaveChanges();
+
+                        ScreenMessages.MessageLoading("Загрузка купюр в банкомат", 50, "$", 70);
+                        ScreenMessages.MessageFlicker(4, 3, "Загрузка купюр прошла успешна!", 500, 3);
+                    }
+
+                    break;
+
+                case "usd":
+
+                    Console.Clear();
+                    using (ApplicationContext db = new ApplicationContext())
+                    {
+
+                        Usd test = new Usd();
+                        var banknotesUsd = db.Usd.ToList();
+
+
+                        banknotesUsd[0].one = BanknotesEdit(usdNumberList[0], banknotesUsd[0].one);
+                        banknotesUsd[0].two = BanknotesEdit(usdNumberList[1], banknotesUsd[0].two);
+                        banknotesUsd[0].five = BanknotesEdit(usdNumberList[2], banknotesUsd[0].five);
+                        banknotesUsd[0].ten = BanknotesEdit(usdNumberList[3], banknotesUsd[0].ten);
+                        banknotesUsd[0].twenty = BanknotesEdit(usdNumberList[4], banknotesUsd[0].twenty);
+                        banknotesUsd[0].fifty = BanknotesEdit(usdNumberList[5], banknotesUsd[0].fifty);
+                        banknotesUsd[0].hundred = BanknotesEdit(usdNumberList[6], banknotesUsd[0].hundred);
+
+
+                        db.SaveChanges();
+
+                        ScreenMessages.MessageLoading("Загрузка купюр в банкомат", 50, "$", 70);
+                        ScreenMessages.MessageFlicker(4, 3, "Загрузка купюр прошла успешна!", 500, 3);
+                    }
+                    break;
+
+                case "eur":
+
+                    Console.Clear();
+                    using (ApplicationContext db = new ApplicationContext())
+                    {
+                        Eur test = new Eur();
+                        var banknotesEur = db.Eur.ToList();
+
+                        banknotesEur[0].five = BanknotesEdit(eurNumberList[0], banknotesEur[0].five);
+                        banknotesEur[0].ten = BanknotesEdit(eurNumberList[1], banknotesEur[0].ten);
+                        banknotesEur[0].twenty = BanknotesEdit(eurNumberList[2], banknotesEur[0].twenty);
+                        banknotesEur[0].fifty = BanknotesEdit(eurNumberList[3], banknotesEur[0].fifty);
+                        banknotesEur[0].hundred = BanknotesEdit(eurNumberList[4], banknotesEur[0].hundred);
+                        banknotesEur[0].twoHundred = BanknotesEdit(eurNumberList[5], banknotesEur[0].twoHundred);
+                        banknotesEur[0].fiveHundred = BanknotesEdit(eurNumberList[6], banknotesEur[0].fiveHundred);
+
+                        db.SaveChanges();
+
+                        ScreenMessages.MessageLoading("Загрузка купюр в банкомат", 50, "$", 70);
+                        ScreenMessages.MessageFlicker(4, 3, "Загрузка купюр прошла успешна!", 500, 3);
+
+                    }
+                    break;
+
+            }
+            Console.Clear();
+        }
+
+
+
+        public static void CashWithdravalWithExchange()
+        {
+
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                Rub test = new Rub();
+                var banknotesRub = db.Rub.ToList();
+
+
+               
+
+                //db.SaveChanges();
+
+                int banknotesIndex = 0;
+                List<int> rubBank = new List <int> { 100, 200, 500, 1000, 2000, 5000 };
+
+                List<string> rubNumberList = new List<string> { "100", "200", "500", "1000", "2000", "5000" };
+
+
+
+
+
+                List<int> listRub = new List<int> { banknotesRub[0].hundred, banknotesRub[0].twoHundred, banknotesRub[0].fiveHundred, banknotesRub[0].thousand, banknotesRub[0].twoThousand, banknotesRub[0].fiveThousand };
+                
+
+                    
+                    
+                    int[] rubWithdrawal = new int[6];
+                    List<int> difference = new List<int> { listRub[0], listRub[1], listRub[2], listRub[3], listRub[4], listRub[5] };
+                   
+
+                    Console.WriteLine("Введите сумму");
+                    int cash = int.Parse(Console.ReadLine());
+                    Console.WriteLine($"Сумма - {cash}\n");
+
+                    for (int i = 5; i < rubBank.Count; i--)
+                    {
+                        if (i >= 0 & cash >= 100)
+                        {
+                            if (i >= 1)
+                            {
+                                if (difference[i] >= difference[i - 1])
+                                {
+                                    if (cash / rubBank[i] > 0)
+                                    {
+                                        rubWithdrawal[i] = cash / rubBank[i];
+
+                                        listRub[i] -= rubWithdrawal[i];
+                                        
+                                        cash = cash - (cash / rubBank[i] * rubBank[i]);
+                                        
+                                    }
+
+                                }
+
+
+                            }
+                            else if (i == 0)
+                            {
+                                if (cash / rubBank[i] > 0)
+                                {
+                                    rubWithdrawal[i] = cash / rubBank[i];
+
+                                    listRub[i] -= rubWithdrawal[i];
+                                    
+                                    cash = cash - (cash / rubBank[i] * rubBank[i]);
+                                    
+                                }
+                            }
+
+
+
+                        }
+                        else { break; }
+
+                    }
+                    
+
+
+
+
+
+                    for (int i = 0; i < rubWithdrawal.Length; i++)
+                    {
+                        
+
+                        Console.WriteLine($"{rubNumberList[i]} вычтено {rubWithdrawal[i]} банкнот из {listRub[i]}");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine($"Остаток - {cash}");
+                    Console.ReadLine();
+                    Console.Clear();
+
+                banknotesRub[0].hundred = listRub[0];
+                banknotesRub[0].twoHundred = listRub[1];
+                banknotesRub[0].fiveHundred = listRub[2];
+                banknotesRub[0].thousand = listRub[3];
+                banknotesRub[0].twoThousand = listRub[4];
+                banknotesRub[0].fiveThousand = listRub[5];
+                db.SaveChanges();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+            
+
+        }
+
+
+
+
+
 
         //using (ApplicationContext db = new ApplicationContext())
         //{

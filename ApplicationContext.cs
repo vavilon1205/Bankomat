@@ -12,7 +12,12 @@ namespace Bankomat
         public DbSet<Rub> Rub => Set<Rub>();
         public DbSet<Usd> Usd => Set<Usd>();
         public DbSet<Eur> Eur => Set<Eur>();
-        public ApplicationContext() => Database.EnsureCreated();
+        public DbSet<SettingsBankomat> SettingsBankomat => Set<SettingsBankomat>();
+        public ApplicationContext()
+        {
+           
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

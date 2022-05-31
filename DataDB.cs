@@ -41,4 +41,15 @@ namespace Bankomat
         public int twoHundred { get; set; }
         public int fiveHundred { get; set; }
     }
+    public class SettingsBankomat
+    {
+        public int Id { get; set; }
+        public string? securyCode { get; set; }
+        public string? pathCards { get; set; }
+        public string? parthPrintBalanceCard { get; set; }
+
+
+    }
+
+    
 }

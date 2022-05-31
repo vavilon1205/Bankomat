@@ -8,79 +8,28 @@ namespace Bankomat
 {
     internal class Cards
     {
-        // Меню создания карт
-        public static void WellcomeMenuCreateCards()
-        {
-
-            Console.WriteLine("Меню создания карт\n");
-            Console.WriteLine("Выход из меню\t\t\t\t - 0");
-            Console.WriteLine("Создание карт\t\t\t\t - 1");
-            Console.WriteLine("Редактирование карт\t\t\t - 2");
-        }
-
-
-        // Меню пути хранения карт
-        public static void DirectoryCardMessageMenu()
-        {
-            Console.WriteLine("Путь хранения карт по умолчанию:\n");
-            Console.WriteLine(@"E:\Programming\C# projects\Bankomat\StorageCards");
-            Console.WriteLine("\nОставить путь директории прежним и выйти назад\t - 0");
-            Console.WriteLine("Изменить путь директории\t\t\t - 1");
-        }
-
-
-        // Создание пути хранения карт
-        public static void CreateDirectoryCard()
-        {
-            Console.WriteLine("Укажите путь директории:\n");
-            string path = Console.ReadLine();
-            string pathDefault = @"E:\Programming\C# projects\Bankomat\StorageCards";
-            if (path.Length == 0)
-            {
-                Console.Clear();
-                DirectoryCardMessageMenu();
-            }
-            try
-            {
-                DirectoryInfo dir = new DirectoryInfo(path);
-                if (!dir.Exists)
-                {
-                    dir.Create();
-                    Console.Clear();
-                    Console.WriteLine("Директория создана");
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Некорректный ввод!");
-                Thread.Sleep(3000);
-                Console.Clear();
-
-
-            }
-
-            DirectoryCardMessageMenu();
-        }
-
-
-
         public static void CreateCard()
         {
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
 
-            FileStream creadCard = new FileStream("Cards.txt", FileMode.OpenOrCreate);
+            FileStream creadCard = new FileStream(parth, FileMode.OpenOrCreate);
             creadCard.Close();
 
         }
 
-        public static int WriteCard(string path, int menuReturn)
+        public static int WriteCard(int menuReturn)
         {
-            if (path == null)
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
             {
-                path = "Cards.txt";
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
             }
-
             string numberCardString = "";
             char[] genNumberCard = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             Random rnd = new Random();
@@ -148,7 +97,7 @@ namespace Bankomat
             if (enter == "1")
             {
                 string cardText = $"{name}/{numberCardString}/{pinCode}/{rub}/{usd}/{eur}";
-                StreamWriter writer = new StreamWriter(path, true);
+                StreamWriter writer = new StreamWriter(parth, true);
                 writer.WriteLine(cardText);
                 writer.Close();
                 ScreenMessages.MessageLoading("Запись", 50, "$", 70);
@@ -168,21 +117,28 @@ namespace Bankomat
 
         }
 
-        public static int ReadCards(string path)
+        public static int ReadCards()
         {
-            DeleteNullLines(path);
+
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
+            DeleteNullLines();
             int enterInt = 0;
             bool readCard = true;
 
             while (readCard == true)
             {
                 Console.Clear();
-                if (File.Exists("Cards.txt") == false)
+                if (File.Exists(parth) == false)
                 {
                     Cards.CreateCard();
                 }
 
-                string[] textStrings = File.ReadAllLines("Cards.txt");
+                string[] textStrings = File.ReadAllLines(parth);
                 Console.WriteLine("\t\t\tСписок карт\n\n");
                 Console.WriteLine("---------------------------------------------------");
                 string[] textString;
@@ -193,30 +149,12 @@ namespace Bankomat
                     textString = textStrings[i].Split(new char[] { '/' });
                     for (int j = 0; j < textString.Length; j++)
                     {
-                        switch (j)
-                        {
-                            case 0:
-                                Console.WriteLine($"\nПорядковый номер:\t\t{i + 1}\n\nИмя владельца карты:\t\t{textString[0]}\n");
-                                break;
-                            case 1:
-                                long numberCardLong = long.Parse(textString[1]);
-                                string numberCardFormat = string.Format("{0:####-####-####-####}", numberCardLong);
-                                Console.WriteLine($"Номер карты:\t\t\t{numberCardFormat}\n");
-                                break;
-                            case 2:
-                                Console.WriteLine($"ПинКод:\t\t\t\t{textString[2]}\n");
-                                break;
-                            case 3:
-                                Console.WriteLine($"Сумма рублей:\t\t\t{textString[3]} руб\n");
-                                break;
-                            case 4:
-                                Console.WriteLine($"Сумма dollars:\t\t\t{textString[4]} usd\n");
-                                break;
-                            case 5:
-                                Console.WriteLine($"Сумма euro:\t\t\t{textString[5]} eur\n\n");
-                                Console.WriteLine("---------------------------------------------------");
-                                break;
-                        }
+
+                        Console.Write($"\nКарта № {i + 1}\tИмя владельца карты: {textString[0]}\n");
+                        Console.WriteLine("---------------------------------------------------");
+                        break;
+
+
                     }
                 }
                 Console.WriteLine("\n\nВернуться назад\t\t\t\t\t\t- 0");
@@ -237,8 +175,19 @@ namespace Bankomat
             return enterInt;
         }
 
-        static void DeleteNullLines(string parth)
+        static void DeleteNullLines()
         {
+
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
+
+            FileStream creadCard = new FileStream(parth, FileMode.OpenOrCreate);
+            creadCard.Close();
+
             string[] textStrings = File.ReadAllLines(parth);
             StreamWriter writer = new StreamWriter(parth);
             foreach (string line in textStrings)
@@ -251,9 +200,14 @@ namespace Bankomat
             writer.Close();
         }
 
-        public static int EditDataCards(string parth, int numberCard)
+        public static int EditDataCards(int numberCard)
         {
-
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
             int enterInt = 0;
             bool readCard = true;
 
@@ -333,8 +287,8 @@ namespace Bankomat
                     }
                     else if (enter == "1")
                     {
-                        DeleteCards(parth, numberCard);
-                        DeleteNullLines(parth);
+                        DeleteCards(numberCard);
+                        DeleteNullLines();
                         ScreenMessages.MessageLoading("Удаление карты", 50, "$", 70);
                         ScreenMessages.MessageFlicker(4, 3, "Удаление карты прошло успешно!", 500, 3);
                         enterInt = 0;
@@ -353,8 +307,15 @@ namespace Bankomat
             return enterInt;
         }
 
-        public static int RenameDataCards(string parth, int menuReturn, int numberCard)
+        public static int RenameDataCards(int menuReturn, int numberCard)
         {
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
+
             Console.Clear();
             string text = "";
             int number = 0;
@@ -514,7 +475,7 @@ namespace Bankomat
 
             if (enter == "1")
             {
-                DeleteCards(parth, numberCard);
+                DeleteCards(numberCard);
                 string cardText = $"{textString[0]}/{textString[1]}/{textString[2]}/{textString[3]}/{textString[4]}/{textString[5]}";
                 textStrings = File.ReadAllLines(parth);
                 var textStringsRewrite = textStrings.ToList();
@@ -545,16 +506,22 @@ namespace Bankomat
 
         }
 
-        static void DeleteCards(string path, int numberCart)
+        static void DeleteCards(int numberCart)
         {
+            string? parth;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var pathCard = db.SettingsBankomat.ToList();
+                parth = pathCard[0].pathCards;
+            }
             string line;
-            string[] textStrings = File.ReadAllLines(path);
+            string[] textStrings = File.ReadAllLines(parth);
             //string[] newTextStrings;
             line = textStrings[numberCart - 1];
             var textStringsRemove = textStrings.ToList();
             textStringsRemove.Remove(line);
             textStrings = textStringsRemove.ToArray();
-            File.WriteAllLines(path, textStrings);
+            File.WriteAllLines(parth, textStrings);
         }
     }
 }
